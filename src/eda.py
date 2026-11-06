@@ -31,6 +31,7 @@ def run_eda(df):
     show_value_counts(df, "belongs_to_collection")
     show_value_counts(df, "director")
 
-    # Genres hold several values ("Action|Adventure"), so split them first
-    genres = df.select(F.explode(F.split(F.col("genres"), "\\|")).alias("genre"))
-    show_value_counts(genres, "genre")
+    # These columns hold several values ("Action|Adventure"), so split them first
+    for column in ["genres", "spoken_languages", "production_countries", "production_companies"]:
+        values = df.select(F.explode(F.split(F.col(column), "\\|")).alias(column))
+        show_value_counts(values, column)
